@@ -1,0 +1,85 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  font-size: 12px;
+  background: lightsteelblue;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.female {
+  stroke: hotpink;
+}
+
+.male {
+  stroke: steelblue;
+}
+
+#controls {
+  margin-bottom: 10px;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 40px auto;
+  max-width: 1000px;
+  padding: 0 20px;
+  background-color: #f9f9f9;
+  color: #222;
+}
+
+nav {
+  margin-bottom: 20px;
+}
+
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #0056b3;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.viz-block {
+  margin-bottom: 60px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.viz-block h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+svg {
+  display: block;
+  margin: auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
