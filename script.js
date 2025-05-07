@@ -6,11 +6,18 @@ const height = +svg.attr("height") - margin.top - margin.bottom;
 const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 const tooltip = d3.select("body").append("div").attr("class", "tooltip");
 
-// Compute average per row
-const computeAverageSeries = (data) => {
+// Compute normalized average per row (activity / max for each mouse)
+const computeNormalizedAverageSeries = (data) => {
+  const keys = Object.keys(data[0]).filter(k => typeof data[0][k] === "number");
+  const maxPerMouse = {};
+
+  keys.forEach(k => {
+    maxPerMouse[k] = d3.max(data, d => d[k]);
+  });
+
   return data.map((row, i) => {
-    const values = Object.values(row).filter(v => typeof v === "number");
-    return { minute: i, avg_activity: d3.mean(values) };
+    const normalizedValues = keys.map(k => row[k] / maxPerMouse[k]);
+    return { minute: i, avg_activity: d3.mean(normalizedValues) };
   });
 };
 
@@ -30,13 +37,11 @@ Promise.all([
   d3.csv("data/Female_Act.csv", d3.autoType),
   d3.csv("data/Male_Act.csv", d3.autoType)
 ]).then(([femaleData, maleData]) => {
-  const femaleAvg = movingAverage(computeAverageSeries(femaleData));
-  const maleAvg = movingAverage(computeAverageSeries(maleData));
+  const femaleAvg = movingAverage(computeNormalizedAverageSeries(femaleData));
+  const maleAvg = movingAverage(computeNormalizedAverageSeries(maleData));
 
   const x = d3.scaleLinear().domain([0, femaleAvg.length]).range([0, width]);
-  const y = d3.scaleLinear()
-    .domain([0, d3.max([...femaleAvg, ...maleAvg], d => d.avg_activity)])
-    .range([height, 0]);
+  const y = d3.scaleLinear().domain([0, 1]).range([height, 0]); // Normalized 0 to 1
 
   const line = d3.line()
     .x(d => x(d.minute))
@@ -62,7 +67,7 @@ Promise.all([
     .attr("r", 2)
     .attr("fill", "hotpink")
     .on("mouseover", (event, d) => {
-      tooltip.style("opacity", 1).html(`Female<br>Min: ${d.minute}<br>Activity: ${d.avg_activity.toFixed(2)}`)
+      tooltip.style("opacity", 1).html(`Female<br>Min: ${d.minute}<br>Activity: ${(d.avg_activity * 100).toFixed(1)}%`)
         .style("left", (event.pageX + 8) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
@@ -78,7 +83,7 @@ Promise.all([
     .attr("r", 2)
     .attr("fill", "steelblue")
     .on("mouseover", (event, d) => {
-      tooltip.style("opacity", 1).html(`Male<br>Min: ${d.minute}<br>Activity: ${d.avg_activity.toFixed(2)}`)
+      tooltip.style("opacity", 1).html(`Male<br>Min: ${d.minute}<br>Activity: ${(d.avg_activity * 100).toFixed(1)}%`)
         .style("left", (event.pageX + 8) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
@@ -89,7 +94,7 @@ Promise.all([
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(x).ticks(14).tickFormat(d => `Day ${Math.floor(d / 1440) + 1}`));
 
-  g.append("g").call(d3.axisLeft(y));
+  g.append("g").call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
 
   // Toggle functionality
   d3.select("#toggleFemale").on("change", function () {
@@ -123,21 +128,21 @@ Promise.all([
   });
 
   // X-axis Label
-svg.append("text")
-.attr("x", margin.left + width / 2)
-.attr("y", height + margin.top + 35)
-.attr("text-anchor", "middle")
-.style("font-size", "14px")
-.style("font-weight", "bold")
-.text("Time (Days)");
+  svg.append("text")
+    .attr("x", margin.left + width / 2)
+    .attr("y", height + margin.top + 35)
+    .attr("text-anchor", "middle")
+    .style("font-size", "14px")
+    .style("font-weight", "bold")
+    .text("Time (Days)");
 
-// Y-axis Label
-svg.append("text")
-.attr("transform", "rotate(-90)")
-.attr("x", -(margin.top + height / 2))
-.attr("y", 20)
-.attr("text-anchor", "middle")
-.style("font-size", "14px")
-.style("font-weight", "bold")
-.text("Average Activity Level");
+  // Y-axis Label
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -(margin.top + height / 2))
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .style("font-size", "14px")
+    .style("font-weight", "bold")
+    .text(" Avg Activity (0–100%)");
 });
