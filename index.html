@@ -20,7 +20,18 @@
     <label><input type="checkbox" id="toggleMale" checked> Show Male</label>
   </div>
 
-  <svg width="960" height="500"></svg>
+  <label for="dataToggle">View:</label>
+  <select id="dataToggle">
+    <option value="activity">Average Activity</option>
+    <option value="temperature">Average Temperature</option>
+  </select>
+
+  <select id="unitToggle">
+    <option value="C">Celsius (°C)</option>
+    <option value="F">Fahrenheit (°F)</option>
+  </select>
+  
+  <svg width="1000" height="400"></svg>
 
   <script src="script.js"></script>
 </body>
