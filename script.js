@@ -64,9 +64,6 @@ Promise.all([
     return dataC.map(d => ({ minute: d.minute, value: d.value * 9 / 5 + 32 }));
   }
 
-  let femaleTempAvg = femaleTempC;
-  let maleTempAvg = maleTempC;
-
   const totalMinutes = femaleActAvg.length;
 
   let x = d3.scaleLinear().domain([0, totalMinutes - 1]).range([0, width]);
@@ -115,42 +112,37 @@ Promise.all([
     })
     .on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
 
-    // === Female toggle ===
-d3.select("#toggleFemale").on("change", function () {
-  const display = this.checked ? null : "none";
-  femalePath.style("display", display);
-  femaleDots.style("display", display);
-});
+  d3.select("#toggleFemale").on("change", function () {
+    const display = this.checked ? null : "none";
+    femalePath.style("display", display);
+    femaleDots.style("display", display);
+  });
 
-// === Male toggle ===
-d3.select("#toggleMale").on("change", function () {
-  const display = this.checked ? null : "none";
-  malePath.style("display", display);
-  maleDots.style("display", display);
-});
+  d3.select("#toggleMale").on("change", function () {
+    const display = this.checked ? null : "none";
+    malePath.style("display", display);
+    maleDots.style("display", display);
+  });
 
-  const xAxis = g.append("g").attr("class", "x-axis")
-    .attr("transform", `translate(0,${height})`);
-
-  const yAxis = g.append("g").attr("class", "y-axis")
-    .call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
+  const xAxis = g.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height})`);
+  const yAxis = g.append("g").attr("class", "y-axis").call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
 
   function updateYAxis() {
     if (currentMode === "activity") {
       y.domain([0, 1]);
-      yAxis.call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
+      yAxis.transition().duration(300).call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
       d3.select("#yAxisLabel").text("Avg Activity (0–100%)");
     } else {
       const [fMin, fMax] = currentUnit === "C" ? [35, 39] : [95, 102.2];
       y.domain([fMin, fMax]);
-      yAxis.call(d3.axisLeft(y).ticks(5));
+      yAxis.transition().duration(300).call(d3.axisLeft(y).ticks(5));
       d3.select("#yAxisLabel").text(`Avg Temperature (°${currentUnit})`);
     }
   }
 
   function updateXAxis(scale) {
     const dayTickValues = d3.range(0, 14 * 1440 + 1, 1440);
-    xAxis.call(d3.axisBottom(scale).tickValues(dayTickValues).tickFormat(d => `Day ${Math.floor(d / 1440)}`));
+    xAxis.transition().duration(300).call(d3.axisBottom(scale).tickValues(dayTickValues).tickFormat(d => `Day ${Math.floor(d / 1440)}`));
   }
 
   updateXAxis(x);
@@ -186,7 +178,6 @@ d3.select("#toggleMale").on("change", function () {
     .on("zoom", event => {
       const newX = event.transform.rescaleX(x);
       updateXAxis(newX);
-
       femalePath.attr("d", line.x(d => newX(d.minute)));
       malePath.attr("d", line.x(d => newX(d.minute)));
       femaleDots.attr("cx", d => newX(d.minute));
@@ -216,7 +207,6 @@ d3.select("#toggleMale").on("change", function () {
       const femaleData = currentUnit === "C" ? femaleTempC : convertToF(femaleTempC);
       const maleData = currentUnit === "C" ? maleTempC : convertToF(maleTempC);
       updateYAxis();
-
       femalePath.datum(femaleData).attr("d", line);
       malePath.datum(maleData).attr("d", line);
       femaleDots.data(femaleData).attr("cy", d => y(d.value));
@@ -232,11 +222,13 @@ d3.select("#toggleMale").on("change", function () {
     .style("font-weight", "bold")
     .text("Time (Days)");
 
-svg.append("text")
-  .attr("id", "yAxisLabel")
-  .attr("transform", `translate(20, ${margin.top + height / 2}) rotate(-90)`)
-  .attr("text-anchor", "middle")
-  .style("font-size", "14px")
-  .style("font-weight", "bold")
-  .text("Avg Activity (0–100%)");
+  svg.append("text")
+    .attr("id", "yAxisLabel")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -(margin.top + height / 2))
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .style("font-size", "14px")
+    .style("font-weight", "bold")
+    .text("Avg Activity (0–100%)");
 });
