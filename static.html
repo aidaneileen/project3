@@ -3,41 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <title>Exploratory Visualizations</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <nav>
-    <a href="index.html">Final Visualization</a>
-    <a href="static.html">Exploratory Visualizations</a>
+
+  <nav class="navbar">
+    <div class="nav-title">🐭 Pipsqueak</div>
+    <div class="nav-links">
+      <a href="index.html">Final Visualization</a>
+      <a href="static.html">Exploratory Visualizations</a>
+    </div>
   </nav>
 
-  <h1>Exploratory Visualizations</h1>
+  <div class="container">
+    <header class="hero">
+      <h1>Exploratory Visualizations</h1>
+      <h3>Breakdown of Trends in Mouse Activity and Temperature</h3>
+      <p>Explore different aspects of the mouse dataset across various visual summaries. Each chart focuses on a different angle to help understand behavior patterns and physiological signals.</p>
+    </header>
 
-  <div class="viz-block">
-    <h2>1. Total Activity per Mouse</h2>
-    <svg id="viz1" width="800" height="400"></svg>
+    <main class="chart-section">
+    <div class="chart-container">
+      <h2 style="text-align: center;">Total Activity per Mouse</h2>
+        <svg id="viz1" width="800" height="400"></svg>
+    </div>
+
+    <div class="chart-container">
+      <h2 style="text-align: center;">Average Hourly Activity Pattern</h2>
+        <svg id="viz2" width="800" height="400"></svg>
+    </div>
+
+    <div class="chart-container">
+      <h2 style="text-align: center;">Average Daily Activity</h2>
+        <svg id="viz3" width="800" height="400"></svg>
+    </div>
+
+    <div class="chart-container">
+      <h2 style="text-align: center;">Temperature Over Time</h2>
+        <svg id="viz4" width="800" height="400"></svg>
+    </div>
+
+    <div class="chart-container">
+      <h2 style="text-align: center;">Activity vs Temperature (Females)</h2>
+        <svg id="viz5" width="800" height="400"></svg>
+    </div>
+    </div>
+    </main>
   </div>
 
-  <div class="viz-block">
-    <h2>2. Average Hourly Activity Pattern</h2>
-    <svg id="viz2" width="800" height="400"></svg>
-  </div>
-
-  <div class="viz-block">
-    <h2>3. Average Daily Activity</h2>
-    <svg id="viz3" width="800" height="400"></svg>
-  </div>
-
-  <div class="viz-block">
-    <h2>4. Temperature Over Time</h2>
-    <svg id="viz4" width="800" height="400"></svg>
-  </div>
-
-  <div class="viz-block">
-    <h2>5. Activity vs Temperature (Females)</h2>
-    <svg id="viz5" width="800" height="400"></svg>
-  </div>
+  <footer>
+    Made by pipsqueak
+  </footer>
 
   <script src="static.js"></script>
 </body>
