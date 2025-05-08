@@ -3,35 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <title>Mouse Activity Visualization</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  
-  <nav>
-    <a href="index.html">Final Visualization</a>
-    <a href="static.html">Exploratory Visualizations</a>
+
+  <nav class="navbar">
+    <div class="nav-title">🐭 Pipsqueak</div>
+    <div class="nav-links">
+      <a href="index.html">Final Visualization</a>
+      <a href="static.html">Exploratory Visualizations</a>
+    </div>
   </nav>
-  
-  <h2>Activity Patterns in Male vs Female Mice</h2>
-  <h3>"How does average activity over time differ between male and female mice, and how is that affected by the estrus cycle?"</h3>
-  <div id="controls">
-    <label><input type="checkbox" id="toggleFemale" checked> Show Female</label>
-    <label><input type="checkbox" id="toggleMale" checked> Show Male</label>
-  </div>
 
-  <label for="dataToggle">View:</label>
-  <select id="dataToggle">
-    <option value="activity">Average Activity</option>
-    <option value="temperature">Average Temperature</option>
-  </select>
+  <div class="container">
+  <header class="hero">
+    <h1>Activity Patterns in Male vs Female Mice</h1>
+    <h3>How does average activity over time differ between male and female mice, and how is that affected by the estrus cycle?</h3>
+      <p>This visualization is based on the <strong>Mouse Data</strong> dataset, which tracks <strong>core body temperature and activity every minute</strong> for two weeks — totaling over <strong>500,000 rows</strong> of data. Each mouse follows a <strong>12-hour light / 12-hour dark cycle</strong>, and because mice are nocturnal, most of their activity occurs during the dark phase.</p>
+      <p>A key biological difference is the <strong>4-day estrus cycle</strong> in female mice. During estrus, females tend to be <strong>more active and warmer</strong>, especially around ovulation. These changes are visualized here, letting you explore both <strong>gender-based differences</strong> and <strong>cyclical behavior</strong> across time.</p>
+      <p><strong>Use the controls below to:</strong></p>
+      <ul>
+        <li>Filter between male and female mice</li>
+        <li>Switch between activity and temperature</li>
+        <li>View normalized averages or individual patterns</li>
+        <li>Zoom into specific days or time windows</li>
+      </ul>
+</header>
 
-  <select id="unitToggle">
-    <option value="C">Celsius (°C)</option>
-    <option value="F">Fahrenheit (°F)</option>
-  </select>
-  
-  <svg width="1000" height="400"></svg>
+  <main class="chart-section">
+    <section class="controls">
+      <div id="controls">
+        <label><input type="checkbox" id="toggleFemale" checked> Show Female</label>
+        <label><input type="checkbox" id="toggleMale" checked> Show Male</label>
+      </div>
+
+      <div class="dropdowns">
+        <label for="dataToggle">View:</label>
+        <select id="dataToggle">
+          <option value="activity">Average Activity</option>
+          <option value="temperature">Average Temperature</option>
+        </select>
+
+        <label for="unitToggle">Units:</label>
+        <select id="unitToggle">
+          <option value="C">Celsius (°C)</option>
+          <option value="F">Fahrenheit (°F)</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="chart-container">
+      <svg></svg>
+    </div>
+  </main>
+</div>
+
+  <footer>
+    Made by pipsqueak
+  </footer>
 
   <script src="script.js"></script>
 </body>

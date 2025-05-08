@@ -1,6 +1,7 @@
 const svg = d3.select("svg");
-svg.attr("width", 1000).attr("height", 700);
-const margin = { top: 60, right: 40, bottom: 60, left: 60 };
+svg.attr("width", 1000).attr("height", 725);
+
+const margin = { top: 60, right: 40, bottom: 80, left: 60 };
 const width = +svg.attr("width") - margin.left - margin.right;
 const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -11,7 +12,7 @@ svg.append("defs").append("clipPath")
   .attr("id", "clip")
   .append("rect")
   .attr("width", width)
-  .attr("height", height);
+  .attr("height", height + 100);
 
 const chartGroup = g.append("g").attr("clip-path", "url(#clip)");
 
@@ -65,14 +66,26 @@ Promise.all([
   }
 
   const totalMinutes = femaleActAvg.length;
-
   let x = d3.scaleLinear().domain([0, totalMinutes - 1]).range([0, width]);
   let y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
 
   const line = d3.line().x(d => x(d.minute)).y(d => y(d.value));
 
-  const femalePath = chartGroup.append("path").datum(femaleActAvg).attr("class", "line female").attr("d", line).style("stroke-width", 0.8);
-  const malePath = chartGroup.append("path").datum(maleActAvg).attr("class", "line male").attr("d", line).style("stroke-width", 0.8);
+  const femalePath = chartGroup.append("path")
+    .datum(femaleActAvg)
+    .attr("class", "line female")
+    .attr("d", line)
+    .style("stroke", "hotpink")
+    .style("fill", "none")
+    .style("stroke-width", 1.5);
+
+  const malePath = chartGroup.append("path")
+    .datum(maleActAvg)
+    .attr("class", "line male")
+    .attr("d", line)
+    .style("stroke", "steelblue")
+    .style("fill", "none")
+    .style("stroke-width", 1.5);
 
   const femaleDots = chartGroup.selectAll(".dot.female")
     .data(femaleActAvg)
@@ -82,16 +95,8 @@ Promise.all([
     .attr("cy", d => y(d.value))
     .attr("r", 2)
     .attr("fill", "hotpink")
-    .on("mouseover", (event, d) => {
-      tooltip.transition().duration(200).style("opacity", .9);
-      const day = Math.floor(d.minute / 1440);
-      const hour = Math.floor((d.minute % 1440) / 60);
-      const minute = d.minute % 60;
-      tooltip.html(`Day ${day} Hr ${hour} Min ${minute}<br>${currentMode === "activity" ? `Activity: ${(d.value * 100).toFixed(1)}%` : `Temp: ${d.value.toFixed(2)}°${currentUnit}`}`)
-        .style("left", (event.pageX + 5) + "px")
-        .style("top", (event.pageY - 28) + "px");
-    })
-    .on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip);
 
   const maleDots = chartGroup.selectAll(".dot.male")
     .data(maleActAvg)
@@ -101,16 +106,32 @@ Promise.all([
     .attr("cy", d => y(d.value))
     .attr("r", 2)
     .attr("fill", "steelblue")
-    .on("mouseover", (event, d) => {
-      tooltip.transition().duration(200).style("opacity", .9);
-      const day = Math.floor(d.minute / 1440);
-      const hour = Math.floor((d.minute % 1440) / 60);
-      const minute = d.minute % 60;
-      tooltip.html(`Day ${day} Hr ${hour} Min ${minute}<br>${currentMode === "activity" ? `Activity: ${(d.value * 100).toFixed(1)}%` : `Temp: ${d.value.toFixed(2)}°${currentUnit}`}`)
-        .style("left", (event.pageX + 5) + "px")
-        .style("top", (event.pageY - 28) + "px");
-    })
-    .on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip);
+
+  function showTooltip(event, d) {
+    const day = Math.floor(d.minute / 1440);
+    const hour = Math.floor((d.minute % 1440) / 60);
+    const minute = d.minute % 60;
+    tooltip.transition().duration(200).style("opacity", .9);
+    tooltip.html(
+      `Day ${day} Hr ${hour} Min ${minute}<br>` +
+      (currentMode === "activity"
+        ? `Activity: ${(d.value * 100).toFixed(1)}%`
+        : `Temp: ${d.value.toFixed(2)}°${currentUnit}`)
+    )
+    .style("left", (event.pageX + 5) + "px")
+    .style("top", (event.pageY - 28) + "px");
+  }
+
+  function hideTooltip() {
+    tooltip.transition().duration(500).style("opacity", 0);
+  }
+
+  function updateLineAndDots(path, dots, data) {
+    path.datum(data).attr("d", line);
+    dots.data(data).attr("cy", d => y(d.value));
+  }
 
   d3.select("#toggleFemale").on("change", function () {
     const display = this.checked ? null : "none";
@@ -124,25 +145,39 @@ Promise.all([
     maleDots.style("display", display);
   });
 
-  const xAxis = g.append("g").attr("class", "x-axis").attr("transform", `translate(0,${height})`);
-  const yAxis = g.append("g").attr("class", "y-axis").call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
+  const xAxis = g.append("g")
+    .attr("class", "x-axis")
+    .attr("transform", `translate(0,${height})`);
+
+  const yAxis = g.append("g")
+    .attr("class", "y-axis")
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
 
   function updateYAxis() {
     if (currentMode === "activity") {
       y.domain([0, 1]);
-      yAxis.transition().duration(300).call(d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`));
+      yAxis.transition().duration(300).call(
+        d3.axisLeft(y).ticks(5).tickFormat(d => `${Math.round(d * 100)}%`)
+      );
       d3.select("#yAxisLabel").text("Avg Activity (0–100%)");
     } else {
       const [fMin, fMax] = currentUnit === "C" ? [35, 39] : [95, 102.2];
+      const degree = `°${currentUnit}`;
       y.domain([fMin, fMax]);
-      yAxis.transition().duration(300).call(d3.axisLeft(y).ticks(5));
-      d3.select("#yAxisLabel").text(`Avg Temperature (°${currentUnit})`);
+      yAxis.transition().duration(300).call(
+        d3.axisLeft(y).ticks(5).tickFormat(d => `${d}${degree}`)
+      );
+      d3.select("#yAxisLabel").text(`Avg Temperature (${degree})`);
     }
   }
 
   function updateXAxis(scale) {
     const dayTickValues = d3.range(0, 14 * 1440 + 1, 1440);
-    xAxis.transition().duration(300).call(d3.axisBottom(scale).tickValues(dayTickValues).tickFormat(d => `Day ${Math.floor(d / 1440)}`));
+    xAxis.transition().duration(300).call(
+      d3.axisBottom(scale)
+        .tickValues(dayTickValues)
+        .tickFormat(d => `Day ${Math.floor(d / 1440)}`)
+    );
   }
 
   updateXAxis(x);
@@ -150,9 +185,10 @@ Promise.all([
   const estrusDays = [2, 6, 10, 14];
   const estrusMinutes = estrusDays.map(day => day * 1440);
 
-  g.selectAll(".estrus-line")
+  const estrusLines = g.selectAll(".estrus-line")
     .data(estrusMinutes)
-    .enter().append("line")
+    .enter()
+    .append("line")
     .attr("class", "estrus-line")
     .attr("x1", d => x(d))
     .attr("x2", d => x(d))
@@ -161,9 +197,10 @@ Promise.all([
     .attr("stroke", "purple")
     .attr("stroke-dasharray", "4,4");
 
-  g.selectAll(".estrus-label")
+  const estrusLabels = g.selectAll(".estrus-label")
     .data(estrusMinutes)
-    .enter().append("text")
+    .enter()
+    .append("text")
     .attr("class", "estrus-label")
     .attr("x", d => x(d) + 4)
     .attr("y", 15)
@@ -192,13 +229,9 @@ Promise.all([
     currentMode = this.value;
     const femaleData = currentMode === "activity" ? femaleActAvg : (currentUnit === "C" ? femaleTempC : convertToF(femaleTempC));
     const maleData = currentMode === "activity" ? maleActAvg : (currentUnit === "C" ? maleTempC : convertToF(maleTempC));
-
     updateYAxis();
-
-    femalePath.datum(femaleData).attr("d", line);
-    malePath.datum(maleData).attr("d", line);
-    femaleDots.data(femaleData).attr("cy", d => y(d.value));
-    maleDots.data(maleData).attr("cy", d => y(d.value));
+    updateLineAndDots(femalePath, femaleDots, femaleData);
+    updateLineAndDots(malePath, maleDots, maleData);
   });
 
   d3.select("#unitToggle").on("change", function () {
@@ -207,20 +240,19 @@ Promise.all([
       const femaleData = currentUnit === "C" ? femaleTempC : convertToF(femaleTempC);
       const maleData = currentUnit === "C" ? maleTempC : convertToF(maleTempC);
       updateYAxis();
-      femalePath.datum(femaleData).attr("d", line);
-      malePath.datum(maleData).attr("d", line);
-      femaleDots.data(femaleData).attr("cy", d => y(d.value));
-      maleDots.data(maleData).attr("cy", d => y(d.value));
+      updateLineAndDots(femalePath, femaleDots, femaleData);
+      updateLineAndDots(malePath, maleDots, maleData);
     }
   });
 
-  svg.append("text")
-    .attr("x", margin.left + width / 2)
-    .attr("y", height + margin.top + 35)
-    .attr("text-anchor", "middle")
-    .style("font-size", "14px")
-    .style("font-weight", "bold")
-    .text("Time (Days)");
+g.append("text")
+  .attr("class", "x-axis-label")
+  .attr("x", width / 2)
+  .attr("y", height + 50) // just below x-axis
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .style("font-weight", "bold")
+  .text("Time (Days)");
 
   svg.append("text")
     .attr("id", "yAxisLabel")

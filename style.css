@@ -1,85 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
 body {
-  font-family: sans-serif;
-  margin: 20px;
+  margin: 0;
+  background-color: #f9f9fb;
+  font-family: 'Quicksand', sans-serif;
+  color: #2e2e2e;
 }
 
-.tooltip {
-  position: absolute;
+/* === CONTAINER === */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  overflow: visible;
+}
+
+/* === NAVIGATION BAR === */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3c3a4f;
+  padding: 14px 24px;
+  border-bottom: 3px solid #2c2a3b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #e0e0e0;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffbe7b;
+}
+
+/* === HEADER === */
+.hero {
   text-align: center;
-  padding: 6px;
-  font-size: 12px;
-  background: lightsteelblue;
-  border-radius: 4px;
-  pointer-events: none;
-  opacity: 0;
+  padding: 40px 30px;
+  background-color: #f3f2f8;
+  border-bottom: 2px solid #e0dee6;
+  border-radius: 16px 16px 0 0;
 }
 
-.line {
-  fill: none;
-  stroke-width: 2px;
+.hero h1 {
+  font-size: 2rem;
+  color: #2c2c2c;
 }
 
-.female {
-  stroke: hotpink;
+.hero p {
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: left;
+  color: #444;
 }
 
-.male {
-  stroke: steelblue;
+.hero ul {
+  list-style-type: none;
+  margin: 1rem;
+  padding: 0;
+  text-align: left;
 }
 
-#controls {
+.hero ul li::before {
+  content: "› ";
+  color: #7c5dff;
+  font-weight: bold;
+}
+
+/* === CHART SECTION === */
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  background-color: #f3f2f8;
+
+}
+
+.chart-section h2 {
+  font-size: 1.5rem;
   margin-bottom: 10px;
-}
-
-body {
-  font-family: sans-serif;
-  margin: 40px auto;
-  max-width: 1000px;
-  padding: 0 20px;
-  background-color: #f9f9f9;
   color: #222;
 }
 
-nav {
-  margin-bottom: 20px;
+/* === CHART CONTAINER === */
+.chart-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  display: inline-block;
+  width: 1000px;
+  width: 100%;
+  max-width: 1000px;
 }
 
-nav a {
+/* === SVG === */
+svg {
+  display: block;
+  width: 1000px;
+  height: 700px;
+}
+
+/* === CONTROLS === */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px auto;
+  width: 1000px;
+  padding: 10px 20px;
+  background-color: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+#controls label {
   margin-right: 15px;
-  text-decoration: none;
-  color: #0056b3;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-h1 {
-  margin-bottom: 30px;
+  font-weight: 500;
   color: #333;
 }
 
-.viz-block {
-  margin-bottom: 60px;
-  background: white;
+.dropdowns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+select,
+input[type="checkbox"] {
+  padding: 6px 10px;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f9f9fb;
+  font-family: 'Quicksand', sans-serif;
+  transition: all 0.2s ease;
 }
 
-.viz-block h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 20px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px;
+select:hover,
+input[type="checkbox"]:hover {
+  box-shadow: 0 0 4px rgba(124, 93, 255, 0.25);
 }
 
-svg {
-  display: block;
-  margin: auto;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+/* === TOOLTIP === */
+.tooltip {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  pointer-events: none;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 9999;
 }
 
+/* === FOOTER === */
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.95em;
+  background-color: #2f2d3d;
+  color: #eaeaea;
+  border-top: 2px solid #1e1c2b;
+}
