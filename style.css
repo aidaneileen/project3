@@ -184,3 +184,51 @@ footer {
   color: #eaeaea;
   border-top: 2px solid #1e1c2b;
 }
+
+/* === RAT GENDER CONTROLS === */
+#controls {
+  display: flex;
+  gap: 2rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+label[data-gender="female"] {
+  color: hotpink;
+}
+
+label[data-gender="male"] {
+  color: steelblue;
+}
+
+label[data-gender="female"] input[type="checkbox"] {
+  accent-color: hotpink;
+}
+
+label[data-gender="male"] input[type="checkbox"] {
+  accent-color: steelblue;
+}
+
+/* === RAT GENDER HEADER === */
+.legend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+

@@ -31,14 +31,33 @@
         <li>View normalized averages or individual patterns</li>
         <li>Zoom into specific days or time windows</li>
       </ul>
+      <p><strong>Blue</strong> corresponds to <strong>male mice</strong>, and <strong>pink</strong> to <strong>female mice</strong>.</p>
+      
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: steelblue;"></span>
+          Male
+        </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background-color: hotpink;"></span>
+        Female
+      </div>
+    </div>
 </header>
 
   <main class="chart-section">
     <section class="controls">
-      <div id="controls">
-        <label><input type="checkbox" id="toggleFemale" checked> Show Female</label>
-        <label><input type="checkbox" id="toggleMale" checked> Show Male</label>
-      </div>
+<div id="controls">
+  <label data-gender="male">
+    <input type="checkbox" id="toggleMale" checked>
+    Show Male
+  </label>
+    <label data-gender="female">
+    <input type="checkbox" id="toggleFemale" checked>
+    Show Female
+  </label>
+</div>
+
 
       <div class="dropdowns">
         <label for="dataToggle">View:</label>
