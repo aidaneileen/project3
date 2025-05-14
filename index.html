@@ -78,6 +78,68 @@
       <svg></svg>
     </div>
   </main>
+
+<header class="hero">
+  <h1>Design Decisions</h1>
+  <h3>Why did we incorporate our interactive features and their design?</h3>
+  <ul>
+  <li><strong>Line charts:</strong> Show precise changes in activity and temperature at minute resolution. Allow users to trace patterns over time and spot recurring peaks linked to the estrus cycle. Enable zooming for closer inspection.</li>
+  <li><strong>Male/Female toggles:</strong> Make comparisons clearer by removing overlapping lines. Help focus on one group at a time when differences are subtle.</li>
+  <li><strong>Activity vs. Temperature toggle:</strong> Reveals how movement correlates with body temperature across light/dark cycles. Reduces the need for separate charts.</li>
+  <li><strong>Data normalization:</strong> Raw values vary too much across mice. Scaling everything to 0–100% lets users compare patterns without baseline differences skewing the chart.</li>
+  <li><strong>Tooltips:</strong> Help users find exact values without adding extra labels or cluttering the interface.</li>
+  <li><strong>Zoom & pan:</strong> Data is dense—zooming helps isolate specific days or phases like estrus. Panning gives flexibility across the full two-week span.</li>
+  <li><strong>Estrus markers:</strong> Visually align behavior and temperature spikes with ovulation cycles. Reinforce the biological context behind the data.</li>
+</ul>
+
+  </ul>
+  <p>We considered alternatives like small multiples and area charts but found them too cluttered or misleading. This layout emphasizes clarity, flexibility, and cycle visibility.</p>
+</header>
+
+<header class="hero">
+  <h1>Development Process</h1>
+  <h3>How was the project built and how was the work divided among the team?</h3>
+  <p>Our team spent approximately <strong>25-30 hours total</strong> developing this project. We followed a phased workflow: exploratory visualizations → interactivity → layout and polish.</p>
+
+<p><strong>Aidan</strong></p>
+<ul>
+  <li>Assisted building static exploratory visualizations.</li>
+  <li>Designed site layout, color theme, and visuals.</li>
+  <li>Implemented tooltip logic and cycle marker placement.</li>
+</ul>
+
+<p><strong>Sri</strong></p>
+<ul>
+  <li>Built interactive toggle features and chart updates.</li>
+  <li>Helped sync activity and temperature states.</li>
+  <li>Wrote and edited the project write-up.</li>
+</ul>
+
+<p><strong>Raghavan</strong></p>
+<ul>
+  <li>Implemented D3 toggle and conditional rendering.</li>
+  <li>Debugged zoom and axis syncing.</li>
+  <li>Refined label formatting and scaling logic.</li>
+</ul>
+
+<p><strong>Daniel</strong></p>
+<ul>
+  <li>Styled visualization appearance and chart container.</li>
+  <li>Helped with toggle logic and debugging.</li>
+  <li>Assisted with exploratory visualizations.</li>
+</ul>
+
+  <p><strong>Challenges and Time Sinks:</strong></p>
+  <ul>
+    <li>Implementing and syncing zoom/pan while keeping axes and tooltips synced.</li>
+    <li>Managing toggles for multiple view states (activity vs. temperature, normalized vs. raw, male vs. female).</li>
+    <li>Styling the site while preserving readability and maintaining a clean visual identity across devices.</li>
+  </ul>
+
+  <p>The team collaborated at each stage, with regular check-ins to ensure our visualization and website was running smoothly.</p>
+</header>
+
+
 </div>
 
   <footer>
